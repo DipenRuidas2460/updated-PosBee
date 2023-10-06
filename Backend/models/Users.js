@@ -1,9 +1,7 @@
 const { Model, DataTypes, Sequelize } = require("sequelize");
 const sequelize = require("../config/dbConfig");
 
-// const package = require("./package");
-
-class User extends Model { }
+class User extends Model {}
 
 User.init(
   {
@@ -13,43 +11,36 @@ User.init(
       autoIncrement: true,
     },
     prefix: {
-      type: Sequelize.ENUM,
-      values: ["Mr", "Mrs", "Miss"],
+      type: DataTypes.ENUM("Mr", "Mrs", "Miss"),
+      allowNull: false,
     },
     firstName: {
       type: DataTypes.STRING,
       allowNull: false,
-      require: true,
     },
     lastName: {
       type: DataTypes.STRING,
-      allowNull: false,
-      require: true,
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      require: true,
+      unique: true,
     },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
-      require: true,
     },
     phoneNumber: {
       type: DataTypes.STRING,
       allowNull: false,
-      require: true,
     },
     userName: {
       type: DataTypes.STRING,
       allowNull: false,
       unique: true,
-      require: true,
     },
     language: {
-      type: Sequelize.ENUM,
-      values: [
+      type: DataTypes.ENUM(
         "English",
         "Spanish - Espanol",
         "Albanian - Shqip",
@@ -57,16 +48,17 @@ User.init(
         "Dutch",
         "French - Francais",
         "German - Deutsch",
-        "Arabic",
-      ],
+        "Arabic"
+      ),
+      allowNull: false,
     },
     fpToken: {
       type: DataTypes.STRING,
     },
-    isDeleted: { type: DataTypes.BOOLEAN, defaultValue: 0 },
   },
   {
     tableName: "users",
+    paranoid: true,
     sequelize,
   }
 );
@@ -74,10 +66,5 @@ User.init(
 (async () => {
   await User.sync({ force: true });
 })();
-
-// User.hasOne(package, {
-//   foreignKey: "subscriptionType",
-//   sourceKey: "subscriptionType",
-// });
 
 module.exports = User;

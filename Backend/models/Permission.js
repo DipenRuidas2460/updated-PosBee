@@ -1,6 +1,6 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
-const Business = require('./Business')
+const Business = require("./Business");
 
 //  Create Permission Model
 
@@ -12,16 +12,16 @@ Permissions.init(
       type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
-      allowNull:false
+      allowNull: false,
     },
     name: {
       type: DataTypes.STRING,
-      allowNull:false
+      allowNull: false,
     },
 
     guardName: {
       type: DataTypes.STRING,
-      allowNull:false
+      allowNull: false,
     },
   },
   {
@@ -71,11 +71,11 @@ Roles.init(
   await Roles.sync({ force: true });
 })();
 
+Business.hasMany(Roles, { foreignKey: "businessId" });
 Roles.belongsTo(Business, {
-    foreignKey: 'businessId',
-    onDelete: 'CASCADE',
-  });
-
+  foreignKey: "businessId",
+  onDelete: "CASCADE",
+});
 
 // create ModelHasPermissions
 
@@ -114,8 +114,10 @@ ModelHasPermissions.init(
   await ModelHasPermissions.sync({ force: true });
 })();
 
+Permissions.hasMany(ModelHasPermissions, { foreignKey: "permissionId" });
 ModelHasPermissions.belongsTo(Permissions, {
   foreignKey: "permissionId",
+  onDelete: "CASCADE",
 });
 
 // create ModelHasRoles
@@ -150,6 +152,7 @@ ModelHasRoles.init(
   await ModelHasRoles.sync({ force: true });
 })();
 
+Roles.hasMany(ModelHasRoles, { foreignKey: "roleId" });
 ModelHasRoles.belongsTo(Roles, {
   foreignKey: "roleId",
   onDelete: "CASCADE",
@@ -181,11 +184,13 @@ RoleHasPermissions.init(
   await RoleHasPermissions.sync({ force: true });
 })();
 
+Permissions.hasMany(RoleHasPermissions, { foreignKey: "permissionId" });
 RoleHasPermissions.belongsTo(Permissions, {
   foreignKey: "permissionId",
   onDelete: "CASCADE",
 });
 
+Roles.hasMany(RoleHasPermissions, { foreignKey: "roleId" });
 RoleHasPermissions.belongsTo(Roles, {
   foreignKey: "roleId",
   onDelete: "CASCADE",

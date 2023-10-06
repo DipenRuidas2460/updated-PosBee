@@ -1,36 +1,42 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
+const Business = require("./Business");
+const User = require("./Users");
 
 class Brand extends Model {}
 
 Brand.init(
   {
     id: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       primaryKey: true,
       autoIncrement: true,
+      allowNull: false,
     },
     businessId: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
-      require: true,
     },
     name: {
       type: DataTypes.STRING,
       allowNull: false,
-      require: true,
     },
-
     description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
+      allowNull: true,
     },
-    createdBy: {
-      type: DataTypes.INTEGER,
+    userId: {
+      type: DataTypes.INTEGER.UNSIGNED,
+      allowNull: false,
     },
-    isDeleted: { type: DataTypes.BOOLEAN, defaultValue: 0 },
+    deletedAt: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
   },
   {
     tableName: "brands",
+    paranoid: true,
     sequelize,
   }
 );
@@ -38,5 +44,17 @@ Brand.init(
 (async () => {
   await Brand.sync({ force: true });
 })();
+
+Business.hasMany(Brand, { foreignKey: "businessId" });
+Brand.belongsTo(Business, {
+  foreignKey: "businessId",
+  onDelete: "CASCADE",
+});
+
+User.hasMany(Brand, { foreignKey: "userId" });
+Brand.belongsTo(User, {
+  foreignKey: "userId",
+  onDelete: "CASCADE",
+});
 
 module.exports = Brand;

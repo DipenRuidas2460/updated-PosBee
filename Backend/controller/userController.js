@@ -40,7 +40,7 @@ const getUserById = async (req, res) => {
         : "User Not Present!",
     });
   } catch (error) {
-    console.log("error=======>", error.message);
+    console.log(error.message);
     return res
       .status(500)
       .json({ status: 500, message: "Something went wrong" });

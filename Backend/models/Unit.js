@@ -1,11 +1,12 @@
 const { Model, DataTypes } = require("sequelize");
 const sequelize = require("../config/dbConfig");
-const Business = require("./Business");
+
 const User = require("./Users");
+const Business = require("./Business");
 
-class Category extends Model {}
+class Units extends Model {}
 
-Category.init(
+Units.init(
   {
     id: {
       type: DataTypes.INTEGER.UNSIGNED,
@@ -13,24 +14,20 @@ Category.init(
       autoIncrement: true,
       allowNull: false,
     },
-    name: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
     businessId: {
       type: DataTypes.INTEGER.UNSIGNED,
       allowNull: false,
     },
-    subcategoryId: {
-      type: DataTypes.INTEGER,
+    actualName: {
+      type: DataTypes.STRING,
       allowNull: false,
     },
-    shortCode: {
+    shortName: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
     },
-    parentId: {
-      type: DataTypes.INTEGER,
+    allowDecimal: {
+      type: DataTypes.BOOLEAN,
       allowNull: false,
     },
     userId: {
@@ -43,26 +40,26 @@ Category.init(
     },
   },
   {
-    tableName: "categories",
+    tableName: "units",
     paranoid: true,
     sequelize,
   }
 );
 
 (async () => {
-  await Category.sync({ force: true });
+  await Units.sync({ force: true });
 })();
 
-Business.hasMany(Category, {foreignKey: 'businessId'})
-Category.belongsTo(Business, {
-  foreignKey: 'businessId',
-  onDelete: 'CASCADE',
+Business.hasMany(Units, { foreignKey: "businessId" });
+Units.belongsTo(Business, {
+  foreignKey: "businessId",
+  onDelete: "CASCADE",
 });
 
-User.hasMany(Category, {foreignKey: 'userId'})
-Category.belongsTo(User, {
-  foreignKey: 'userId',
-  onDelete: 'CASCADE',
+User.hasMany(Units, { foreignKey: "userId" });
+Units.belongsTo(User, {
+  foreignKey: "userId",
+  onDelete: "CASCADE",
 });
 
-module.exports = Category;
+module.exports = Units;

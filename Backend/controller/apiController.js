@@ -1,7 +1,6 @@
 const User = require("../models/Users");
-const Category = require("../models/category");
-const AppTxn = require("../models/apptxn");
-const Packages = require("../models/package");
+const Category = require("../models/Category");
+const AppTxn = require("../models/TaxRates");
 const moment = require("moment");
 const { generateString, getUserbyToken } = require("../helpers/main");
 

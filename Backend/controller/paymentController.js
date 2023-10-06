@@ -1,5 +1,5 @@
 const Stripe = require("stripe");
-const appTxn = require("../models/apptxn");
+const appTxn = require("../models/TaxRates");
 const User = require("../models/Users");
 const { getUserbyToken, generateRandomString } = require("../helpers/main");
 require("dotenv").config();
